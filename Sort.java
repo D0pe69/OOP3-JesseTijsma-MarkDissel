@@ -2,7 +2,6 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
@@ -12,7 +11,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.util.*;
@@ -32,17 +30,11 @@ public class Sort extends Application {
             MAX_BAR_HEIGHT = 50;
 
     private static final String
-            COLOR_ACTIVE = "-fx-bar-fill: #fff",
-            COLOR_INITIAL = "-fx-bar-fill: #888",
-            COLOR_FINALIZED = "-fx-bar-fill: #190707";
+            COLOR_INITIAL = "-fx-bar-fill: #888";
 
-    private static final int
-            DELAY_MILLIS = 700;
     private int pointer = 1;
     private int notSwapped = 0;
     private int finished = 0;
-    int low = 0;
-    int high = 13;
 
 
     private ObservableList<Data<String, Number>> bars;
@@ -125,14 +117,6 @@ public class Sort extends Application {
         inputs.getChildren().add(slider);
     }
 
-    private void makeTopText(BorderPane pane, String text) {
-        Text t = new Text();
-        t.setText(text);
-        BorderPane.setAlignment(pane, Pos.TOP_CENTER);
-        pane.setTop(t);
-
-    }
-
     private void addPainting(Node newNode, String colorInitial) {
         if (newNode != null) {
             newNode.setStyle(colorInitial);
@@ -143,10 +127,6 @@ public class Sort extends Application {
         final Button test = new Button(label);
         test.setOnAction(event -> method.run());
         inputs.getChildren().add(test);
-    }
-
-    private void disableButtons(Button button, boolean b) {
-        button.setDisable(b);
     }
 
     private void randomizeAll(BorderPane pane) {
@@ -344,37 +324,13 @@ public class Sort extends Application {
 
         System.out.println("A is eerst " + a + ", B is eerst " + b + ", En wallindex is eerst: " + wallIndex);
 
+        /**
+         * De HashMap waar A en B worden opgeslagen om de recursie te "simuleren"
+         */
         myMap = new HashMap<String, Integer>();
         myMap.put("A", a);
         myMap.put("B", b);
         myMap.put("Wallindex", wallIndex);
     }
 
-    private int findNextR(final int l, final int size) {
-        List<Data<String, Number>> list = bars;
-        for (int i = l; i < size; ++i) {
-            if (getValue(list, i) < 0)
-                return i;
-        }
-        return size - 1;
-    }
-
-    private int partition(int l, int r) {
-        List<Data<String, Number>> list = bars;
-        long pivot = (long) getValue(list, ((l+r) / 2));
-        while (l <= r) {
-            while (getValue(list, r) > pivot)
-                r--;
-            while (getValue(list, l) < pivot)
-                l++;
-            if (l <= r) {
-                long tmp = (long) getValue(list, r);
-                list.get(r).setYValue(l);
-                list.get(l).setYValue(tmp);
-                l++;
-                r--;
-            }
-        }
-        return l;
-    }
 }
